@@ -35,14 +35,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     type = "SystemAssigned"
   }
 
-  role_based_access_control {
-    enabled = true
-  }
-
   network_profile {
     network_plugin = "azure"
   }
 }
+
 
 # Role assignment: AKS to pull from ACR
 resource "azurerm_role_assignment" "aks_acr" {

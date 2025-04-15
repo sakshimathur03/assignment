@@ -31,11 +31,11 @@ variable "dns_prefix" {
 variable "node_count" {
   description = "Number of nodes in the AKS cluster"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "vm_size" {
   description = "The VM size for the AKS node pool"
   type        = string
-  default     = "Standard_B1ms"
+  default     = "Standard_B2ms"
 }

@@ -34,11 +34,19 @@ resource "azurerm_kubernetes_cluster" "aks" {
   identity {
     type = "SystemAssigned"
   }
+
+  role_based_access_control {
+    enabled = true
+  }
+
+  network_profile {
+    network_plugin = "azure"
+  }
 }
 
-# Grant AKS permission to pull from ACR
+# Role assignment: AKS to pull from ACR
 resource "azurerm_role_assignment" "aks_acr" {
-  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity.object_id
   role_definition_name = "AcrPull"
   scope                = azurerm_container_registry.acr.id
 }

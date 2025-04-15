@@ -2,14 +2,31 @@ pipeline {
   agent any
 
   environment {
-    AZURE_CREDENTIALS_ID = 'azure-service-principal'
+    AZURE_CREDENTIALS_ID = 'azure-service-principal' // Make sure this is configured in Jenkins credentials
     ACR_NAME = 'sakshiacr25'
-    IMAGE_NAME = 'assignmentTDKJ'
+    IMAGE_NAME = 'assignmenttdkj'
     RESOURCE_GROUP = 'rg-assesment'
     CLUSTER_NAME = 'sakshiaks34'
   }
 
   stages {
+    stage('Login to Azure') {
+      steps {
+        withCredentials([azureServicePrincipal(
+          credentialsId: "${AZURE_CREDENTIALS_ID}",
+          subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID',
+          clientIdVariable: 'AZ_CLIENT_ID',
+          clientSecretVariable: 'AZ_CLIENT_SECRET',
+          tenantIdVariable: 'AZ_TENANT_ID'
+        )]) {
+          bat '''
+            az login --service-principal -u %AZ_CLIENT_ID% -p %AZ_CLIENT_SECRET% --tenant %AZ_TENANT_ID%
+            az account set --subscription %AZ_SUBSCRIPTION_ID%
+          '''
+        }
+      }
+    }
+
     stage('Terraform Init & Apply') {
       steps {
         dir('Terraform') {
@@ -21,20 +38,20 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        bat 'az acr login --name $ACR_NAME'
-        bat "docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:latest ."
+        bat "az acr login --name %ACR_NAME%"
+        bat "docker build -t %ACR_NAME%.azurecr.io/%IMAGE_NAME%:latest ."
       }
     }
 
     stage('Push to ACR') {
       steps {
-        bat "docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:latest"
+        bat "docker push %ACR_NAME%.azurecr.io/%IMAGE_NAME%:latest"
       }
     }
 
     stage('Deploy to AKS') {
       steps {
-        bat "az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --overwrite-existing"
+        bat "az aks get-credentials --resource-group %RESOURCE_GROUP% --name %CLUSTER_NAME% --overwrite-existing"
         bat 'kubectl apply -f deployment.yaml'
         bat 'kubectl apply -f service.yaml'
       }

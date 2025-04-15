@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AssignmentTDKJ")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+09b4d0df049aa854c375f58e9502451c95f4c5a5")]
 [assembly: System.Reflection.AssemblyProductAttribute("AssignmentTDKJ")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AssignmentTDKJ")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

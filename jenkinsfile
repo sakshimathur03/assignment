@@ -2,40 +2,40 @@ pipeline {
   agent any
 
   environment {
-    ACR_NAME = 'demoacr2025'
-    IMAGE_NAME = 'api'
-    RESOURCE_GROUP = 'rg-demo'
-    CLUSTER_NAME = 'demoaks2025'
+    ACR_NAME = 'sakshiacr25'
+    IMAGE_NAME = 'assignmentTDKJ'
+    RESOURCE_GROUP = 'rg-assesment'
+    CLUSTER_NAME = 'sakshiaks34'
   }
 
   stages {
     stage('Terraform Init & Apply') {
       steps {
-        dir('terraform') {
-          sh 'terraform init'
-          sh 'terraform apply -auto-approve'
+        dir('Terraform') {
+          bat 'terraform init'
+          bat 'terraform apply -auto-approve'
         }
       }
     }
 
     stage('Build Docker Image') {
       steps {
-        sh 'az acr login --name $ACR_NAME'
-        sh "docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:latest ."
+        bat 'az acr login --name $ACR_NAME'
+        bat "docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:latest ."
       }
     }
 
     stage('Push to ACR') {
       steps {
-        sh "docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:latest"
+        bat "docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:latest"
       }
     }
 
     stage('Deploy to AKS') {
       steps {
-        sh "az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --overwrite-existing"
-        sh 'kubectl apply -f deployment.yaml'
-        sh 'kubectl apply -f service.yaml'
+        bat "az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --overwrite-existing"
+        bat 'kubectl apply -f deployment.yaml'
+        bat 'kubectl apply -f service.yaml'
       }
     }
   }

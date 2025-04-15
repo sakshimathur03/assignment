@@ -25,7 +25,7 @@ variable "aks_name" {
 variable "dns_prefix" {
   description = "DNS prefix for AKS"
   type        = string
-  default     = "demoaks"
+  default     = "sakshiaks"
 }
 
 variable "node_count" {

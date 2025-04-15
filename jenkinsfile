@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   environment {
+    AZURE_CREDENTIALS_ID = 'azure-service-principal'
     ACR_NAME = 'sakshiacr25'
     IMAGE_NAME = 'assignmentTDKJ'
     RESOURCE_GROUP = 'rg-assesment'

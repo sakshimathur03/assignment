@@ -14,31 +14,6 @@ provider "azurerm" {
   features {}
 }
 
-# Variables
-variable "location" {
-  default = "East US"
-}
-
-variable "resource_group_name" {
-  default = "rg-docker"
-}
-
-variable "acr_name" {
-  default = "sakshi03" 
-}
-
-variable "aks_cluster_name" {
-  default = "cluster3425"
-}
-
-variable "dns_prefix" {
-  default = "myakscluster"
-}
-
-variable "node_count" {
-  default = 2
-}
-
 # Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
@@ -64,7 +39,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   default_node_pool {
     name       = "default"
     node_count = var.node_count
-    vm_size    = "Standard_B1ms"
+    vm_size    = var.vm_size
   }
 
   identity {
@@ -87,7 +62,6 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
   role_definition_name = "AcrPull"
   scope                = azurerm_container_registry.acr.id
 
- 
   depends_on = [
     azurerm_kubernetes_cluster.aks
   ]

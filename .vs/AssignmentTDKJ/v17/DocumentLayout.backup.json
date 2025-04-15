@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\HP\\Documents\\AssignmentTDKJ\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{39FD702F-C079-469C-8795-EE00170E2F96}|AssignmentTDKJ.csproj|d:\\hp\\documents\\assignmenttdkj\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{39FD702F-C079-469C-8795-EE00170E2F96}|AssignmentTDKJ.csproj|solutionrelative:dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}|NewFolder1{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}|D:\\HP\\Documents\\AssignmentTDKJ\\main.tf||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}|NewFolder1{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}|solutionrelative:main.tf||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
@@ -28,24 +32,24 @@
         },
         {
           "DockedWidth": 25,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "variables.tf",
-              "DocumentMoniker": "D:\\HP\\Documents\\AssignmentTDKJ\\variables.tf",
-              "RelativeDocumentMoniker": "variables.tf",
-              "ToolTip": "D:\\HP\\Documents\\AssignmentTDKJ\\variables.tf",
-              "RelativeToolTip": "variables.tf",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAAcAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "D:\\HP\\Documents\\AssignmentTDKJ\\Dockerfile",
+              "RelativeDocumentMoniker": "Dockerfile",
+              "ToolTip": "D:\\HP\\Documents\\AssignmentTDKJ\\Dockerfile",
+              "RelativeToolTip": "Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-15T05:13:56.061Z",
+              "WhenOpened": "2025-04-15T05:44:48.354Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "main.tf",
               "DocumentMoniker": "D:\\HP\\Documents\\AssignmentTDKJ\\main.tf",
               "RelativeDocumentMoniker": "main.tf",
@@ -59,6 +63,19 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "variables.tf",
+              "DocumentMoniker": "D:\\HP\\Documents\\AssignmentTDKJ\\variables.tf",
+              "RelativeDocumentMoniker": "variables.tf",
+              "ToolTip": "D:\\HP\\Documents\\AssignmentTDKJ\\variables.tf",
+              "RelativeToolTip": "variables.tf",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-04-15T05:13:56.061Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -37,5 +37,5 @@ variable "node_count" {
 variable "vm_size" {
   description = "The VM size for the AKS node pool"
   type        = string
-  default     = "Standard_DS2_v2"
+  default     = "Standard_B1ms"
 }

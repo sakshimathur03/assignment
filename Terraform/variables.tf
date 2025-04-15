@@ -16,7 +16,7 @@ variable "acr_name" {
   default     = "sakshiacr25"
 }
 
-variable "aks_name" {
+variable "aks_cluster_name" {
   description = "Azure Kubernetes Service name"
   type        = string
   default     = "sakshiaks34"

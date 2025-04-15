@@ -53,7 +53,7 @@ pipeline {
       steps {
         bat "az aks get-credentials --resource-group %RESOURCE_GROUP% --name %CLUSTER_NAME% --overwrite-existing"
         bat 'kubectl apply -f deployment.yaml'
-        bat 'kubectl apply -f service.yaml'
+       
       }
     }
   }

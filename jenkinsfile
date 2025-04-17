@@ -1,58 +1,95 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    AZURE_CREDENTIALS_ID = 'azure-service-principal' // Make sure this is configured in Jenkins credentials
-    ACR_NAME = 'sakshiacr25'
-    IMAGE_NAME = 'assignmenttdkj'
-    RESOURCE_GROUP = 'rg-assesment'
-    CLUSTER_NAME = 'sakshiaks34'
-  }
+    environment {
+        AZURE_CREDENTIALS_ID = 'azure-service-principal'  // Ensure this is configured in Jenkins credentials
+        ACR_NAME = 'sakshiacr25'
+        IMAGE_NAME = 'assignmenttdkj'
+        RESOURCE_GROUP = 'rg-assesment'
+        CLUSTER_NAME = 'sakshiaks34'
+    }
 
-  stages {
-    stage('Login to Azure') {
-      steps {
-        withCredentials([azureServicePrincipal(
-          credentialsId: "${AZURE_CREDENTIALS_ID}",
-          subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID',
-          clientIdVariable: 'AZ_CLIENT_ID',
-          clientSecretVariable: 'AZ_CLIENT_SECRET',
-          tenantIdVariable: 'AZ_TENANT_ID'
-        )]) {
-          bat 'az login --service-principal -u %AZ_CLIENT_ID% -p %AZ_CLIENT_SECRET% --tenant %AZ_TENANT_ID%'
-          bat 'az account set --subscription %AZ_SUBSCRIPTION_ID%'
+    stages {
+        stage('Login to Azure') {
+            steps {
+                withCredentials([azureServicePrincipal(
+                    credentialsId: "${AZURE_CREDENTIALS_ID}",
+                    subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID',
+                    clientIdVariable: 'AZ_CLIENT_ID',
+                    clientSecretVariable: 'AZ_CLIENT_SECRET',
+                    tenantIdVariable: 'AZ_TENANT_ID'
+                )]) {
+                    bat 'az login --service-principal -u %AZ_CLIENT_ID% -p %AZ_CLIENT_SECRET% --tenant %AZ_TENANT_ID%'
+                    bat 'az account set --subscription %AZ_SUBSCRIPTION_ID%'
+                }
+            }
         }
-      }
-    }
 
-    stage('Terraform Init & Apply') {
-      steps {
-        dir('Terraform') {
-          bat 'terraform init'
-          bat 'terraform plan'
-          bat 'terraform apply -auto-approve'
+        stage('Terraform Init & Apply') {
+            steps {
+                dir('Terraform') {
+                    bat 'terraform init'
+                    bat 'terraform plan'
+                    bat 'terraform apply -auto-approve'
+                }
+            }
         }
-      }
+
+        stage('Build Docker Image') {
+            steps {
+                bat "az acr login --name %ACR_NAME%"
+                bat "docker build -t %ACR_NAME%.azurecr.io/%IMAGE_NAME%:latest ."
+            }
+        }
+
+        stage('Push Docker Image to ACR') {
+            steps {
+                bat "docker push %ACR_NAME%.azurecr.io/%IMAGE_NAME%:latest"
+            }
+        }
+
+        stage('Deploy to AKS') {
+            steps {
+                bat "az aks get-credentials --resource-group %RESOURCE_GROUP% --name %CLUSTER_NAME% --overwrite-existing"
+                bat 'kubectl apply -f deployment.yaml'
+            }
+        }
+
+        stage('Check Pods Status') {
+            steps {
+                script {
+                    // Wait for pods to be ready
+                    bat "kubectl rollout status deployment/${IMAGE_NAME} --timeout=600s"
+                    bat "kubectl get pods"
+                }
+            }
+        }
+
+        stage('Check Service Status') {
+            steps {
+                script {
+                    // Check if service is exposed correctly
+                    bat "kubectl get svc dotnet-api-service"
+                }
+            }
+        }
+
+        stage('Verify LoadBalancer IP') {
+            steps {
+                script {
+                    // Wait for the LoadBalancer to have an external IP assigned
+                    bat "kubectl get svc dotnet-api-service --watch"
+                }
+            }
+        }
     }
 
-    stage('Build Docker Image') {
-      steps {
-        bat "az acr login --name %ACR_NAME%"
-        bat "docker build -t %ACR_NAME%.azurecr.io/%IMAGE_NAME%:latest ."
-      }
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs above for details.'
+        }
     }
-
-    stage('Push to ACR') {
-      steps {
-        bat "docker push %ACR_NAME%.azurecr.io/%IMAGE_NAME%:latest"
-      }
-    }
-
-    stage('Deploy to AKS') {
-      steps {
-        bat "az aks get-credentials --resource-group %RESOURCE_GROUP% --name %CLUSTER_NAME% --overwrite-existing"
-        bat 'kubectl apply -f deployment.yaml'
-      }
-    }
-  }  // Correct closing brace for the stages block
-}  // Correct closing brace for the pipeline block
+}
